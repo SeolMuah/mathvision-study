@@ -3,10 +3,10 @@ import os.path as osp
 
 import cv2
 import numpy as np
-from utils import classifyHomography
+from check_homography import check_homography
 
 MIN_MATCH_NUM = 4
-WEB_CAM_MODE = False
+WEB_CAM_MODE = True
 
 def proc_video(video_capture: cv2.VideoCapture, model: np.ndarray):
     model_gray = cv2.cvtColor(model, cv2.COLOR_BGR2GRAY)
@@ -66,7 +66,7 @@ def proc_video(video_capture: cv2.VideoCapture, model: np.ndarray):
             draw_frame = cv2.polylines(draw_frame, [np.int32(dst)], True, (0,255,0), 3, cv2.LINE_AA)
 
             ## classify homography
-            homo_type = classifyHomography(pts.reshape(4,2), dst.reshape(4,2))
+            homo_type = check_homography(pts.reshape(4,2), dst.reshape(4,2))
             
             cv2.putText(draw_frame, f"{homo_type}", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
         

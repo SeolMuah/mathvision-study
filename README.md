@@ -1,4 +1,4 @@
-# MathVision23333
+# MathVision
 
 Mathematical Tools for Computer Vision
 
