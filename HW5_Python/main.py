@@ -10,36 +10,8 @@ def get_rotation_theta(r1, r2) :
     :return: 회전한 각도 라디안
     """
     
-    theta = np.arccos(np.dot(r1,r2) / (np.linalg.norm(r1) * np.linalg.norm(r2)))
-    cross = np.cross(r1, r2)
-
-    if cross[-1] < 0 :
-        theta = -theta
-    return theta
-
-    # h_unit = h / np.linalg.norm(h)
-    # ux, uy, uz = h_unit
-    # x = Symbol('x')
-    # cos = s.cos(x)
-    # sin = s.sin(x)
-    # R = s.Matrix([(cos+(ux**2)*(1-cos), ux*uy*(1-cos)-uz*sin, ux*uz*(1-cos)+uy*sin),
-    #                 (uy*ux*(1-cos) + uz*sin, cos+(uy**2)*(1-cos), uy*uz*(1-cos)-ux*sin),
-    #                 (uz*ux*(1-cos)-uy*sin, uz*uy*(1-cos)+ux*sin, cos+(uz**2)*(1-cos))])
-    # r1 = s.Matrix(r1)
-    # r2 = s.Matrix(r2)
-    # eq = R*r1 - r2
-
-    # solution = [solve(eq[i]) for i in range(len(eq))]
-    
-    # #실수 값 비교하기 위한 소수점 절사
-    # solution_round = [set([np.round(float(n), 4) for n in eq]) for eq in solution]
-    
-    # #3개의 방정식 풀이에서 같은 값 하나 얻기
-    # result = list(solution_round[0] & solution_round[1] & solution_round[2])
-    
-
-    # return result[0]
-
+    return np.arccos(np.dot(r1, r2) / (np.linalg.norm(r1) * np.linalg.norm(r2)))
+ 
 
 def get_rotation_matrix(vec1 : np.array, vec2 : np.array) :
     """
