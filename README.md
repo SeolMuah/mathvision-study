@@ -1,4 +1,4 @@
-# MathVision
+# MathVision2
 
 Mathematical Tools for Computer Vision
 
