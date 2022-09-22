@@ -41,16 +41,15 @@ def get_rotation_theta(r1, r2) :
     # return result[0]
 
 
-def get_rotation_matrix(theta : np.array, vec1 : np.array, vec2 : np.array) :
+def get_rotation_matrix(vec1 : np.array, vec2 : np.array) :
     """
-    :param theta: 회전 각도 (라디안)
     :param vec1: 3X1 벡터
     :param vec2: 3X1 벡터
     :return: 3X3 회전 행렬
     """
     h = np.cross(vec1, vec2)
     h = h/np.linalg.norm(h)
-    theta = float(theta)
+    theta = get_rotation_theta(vec1, vec2)
     cos = np.cos(theta)
     sin = np.sin(theta)
     ux,uy,uz = h
@@ -98,7 +97,7 @@ theta = get_rotation_theta(h1, h2)
 print(f"회전각도  Theta1 (Radian, degree) : ({theta:.4f}, {theta/np.pi*180:.4f})")
 
 #(1-2) h1 -> h2 회전 행렬 
-R1 = get_rotation_matrix(theta, h1, h2)
+R1 = get_rotation_matrix(h1, h2)
 print(f"회전행렬 R1 : {R1}")
 #검산 : h1@R == h2
 print(f"R1 @ h1 = {R1 @ h1},\nh2 = {h2}") 
@@ -114,7 +113,7 @@ print(f"회전각도 Theta2 (Radian, degree) : ({theta2:.4f}, {theta2/np.pi*180:
 
 #(2-2) R1(p1p3) -> p1'p3' 회전 행렬 
 
-R2 = get_rotation_matrix(theta2, r1_p13, p13_)
+R2 = get_rotation_matrix(r1_p13, p13_)
 print(f"회전행렬 R2 : {R2}")
 #검산 : R2 @ R1(p1p3) == p13
 print(f"R2 @ R1(p1p3) = {R2 @ r1_p13},\nh2 = {p13_}") 
