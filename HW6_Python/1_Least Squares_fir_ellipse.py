@@ -8,6 +8,9 @@ REFLEX = "reflex"
 CONCAVE = "concave"
 TWIST = "twist"
 
+def num_to_str(num) :
+    sign =  '+' if num>0 else '-'
+    return sign + f'{abs(num):3.1f}'
 def on_mouse(event, x, y, flags, param):
     # event는 마우스 동작 상수값, 클릭, 이동 등등
     # x, y는 내가 띄운 창을 기준으로 좌측 상단점이 0,0이 됌
@@ -19,8 +22,8 @@ def on_mouse(event, x, y, flags, param):
     
     if event == cv2.EVENT_LBUTTONDOWN and draw_on: # 왼쪽이 눌러지면 실행
         points.append((x,y))
-        left_m.append((x,y,1))
-        right_m.append((-x**2-y**2))
+        left_m.append((x**2,x*y,y**2,x,y,1))
+    
         print('EVENT_LBUTTONDOWN: %d, %d' % (x, y)) # 좌표 출력
 
     elif event == cv2.EVENT_LBUTTONUP and draw_on:
@@ -35,18 +38,44 @@ def on_mouse(event, x, y, flags, param):
         #원 완성
         if len(left_m) >= 3 :
             l_m = np.array(left_m)
-            r_m = np.array(right_m)
-            A_plus = np.linalg.inv(l_m.T @ l_m) @ l_m.T
-            result = A_plus @ r_m
-            #중심 좌표 및 반지름
-            a,b,c = result
-            center_x = int(-1/2 * a)
-            center_y = int(-1/2 * b)
-            radius = int(np.sqrt(-c + 1/4*a**2 + 1/4*b**2))
-            cv2.circle(bg, (center_x, center_y), radius, (0,255,255), 1)
-            cv2.putText(bg, f"the equation of circle  : (x-{center_x})^2 + (y-{center_y})^2 = {radius*2}", (5,30), 
-                        cv2.FONT_HERSHEY_PLAIN, 1.0, (255,255,255), 1, cv2.LINE_AA)
-            cv2.imshow('polygon', bg)
+            U,s,Vt = np.linalg.svd(l_m, full_matrices=True)
+            print(f"특이값 : {s}")
+            print(f"우측 특이벡터 : {Vt}")
+            result = Vt[-1] #가장 마지막 값이 특이값이 가장 작은 것
+            a,b,c,d,e,f = result
+            print(f"A*x = {l_m@result}")
+
+            #중심 좌표 
+            center_x = (2*c*d-b*e) / (b**2-4*a*c)
+            center_y = (2*a*e-b*d) / (b**2-4*a*c)
+   
+            #회전 각
+            theta = np.arctan2(b, a-c)/2 
+
+            #고유값
+            e1 = a*np.cos(theta)**2 + b*np.cos(theta)*np.sin(theta) + c*np.sin(theta)**2
+            e2 = a*np.sin(theta)**2 - b*np.cos(theta)*np.sin(theta) + c*np.cos(theta)**2
+
+            #스케일 역수값
+            scale_inv = (a*center_x**2 + b*center_x*center_y + c*center_y**2) - f
+
+            #장축 및 단축 길이
+            l_length = scale_inv/e1
+            s_length = scale_inv/e2
+            if l_length > 0 and s_length > 0 : 
+                l_length = np.sqrt(l_length)
+                s_length = np.sqrt(s_length)
+                center_x, center_y, theta, l_length, s_length = int(center_x), int(center_y), int(theta* 180 / np.pi), int(l_length), int(s_length)
+                cv2.ellipse(bg, (center_x, center_y), (l_length, s_length), theta, 0, 360, (0,255,255), 1)
+
+
+                # cv2.putText(bg, f"the equation of ellipse  : {a}x^2{num_to_str(b)}xy{num_to_str(c)}y^2{num_to_str(d)}x{num_to_str(e)}y{num_to_str(f)} = 0", (5,30), 
+                #             cv2.FONT_HERSHEY_PLAIN, 1.0, (255,255,255), 1, cv2.LINE_AA)
+                cv2.imshow('polygon', bg)
+            else :
+                print("오류~!")
+
+            
 
             draw_on = False
 
