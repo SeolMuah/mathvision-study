@@ -35,7 +35,7 @@ def on_mouse(event, x, y, flags, param):
         print(f'입력 받은 좌표: {points}') # 좌표 출력
 
     elif event == cv2.EVENT_RBUTTONDOWN :
-        #원 완성
+        #타원 완성
         if len(left_m) >= 3 :
             l_m = np.array(left_m)
             U,s,Vt = np.linalg.svd(l_m, full_matrices=True)
@@ -67,10 +67,6 @@ def on_mouse(event, x, y, flags, param):
                 s_length = np.sqrt(s_length)
                 center_x, center_y, theta, l_length, s_length = int(center_x), int(center_y), int(theta* 180 / np.pi), int(l_length), int(s_length)
                 cv2.ellipse(bg, (center_x, center_y), (l_length, s_length), theta, 0, 360, (0,255,255), 1)
-
-
-                # cv2.putText(bg, f"the equation of ellipse  : {a}x^2{num_to_str(b)}xy{num_to_str(c)}y^2{num_to_str(d)}x{num_to_str(e)}y{num_to_str(f)} = 0", (5,30), 
-                #             cv2.FONT_HERSHEY_PLAIN, 1.0, (255,255,255), 1, cv2.LINE_AA)
                 cv2.imshow('polygon', bg)
             else :
                 print("오류~!")
