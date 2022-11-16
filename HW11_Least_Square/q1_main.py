@@ -40,15 +40,22 @@ mean_y = pos[:,1].mean()
 std_y = pos[:,1].std()
 for x,y in pos :
     #좌표 Z표준화
-    norm_x = (x-mean_x)/std_x
-    norm_y = (y-mean_y)/std_y
+    # norm_x = (x-mean_x)/std_x
+    # norm_y = (y-mean_y)/std_y
+    norm_x = x
+    norm_y = y
+
     A.append((norm_x**2, norm_y**2, norm_x*norm_y, norm_x, norm_y, 1))
     I.append(img[y,x])
 
 A = np.array(A)
 I = np.array(I)
 A.shape, I.shape #((154614, 6), (154614,))
+
+
+
 A_plus = np.linalg.inv((A.T @ A)) @ A.T
+A_plus = np.linalg.pinv(A)
 P = A_plus @ I
 pos.shape #(154614, 2)
 
