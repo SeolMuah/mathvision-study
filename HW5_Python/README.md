@@ -1,16 +1,21 @@
-# MathVision - Python version
+# MathVision - Python Code
 
 python >= 3.8
 
-## 강체의 좌표 변환
-main.py
+## 다각형 면적 계산
+polygon_demo.py
 ```
-기준 강체의 세점과 회전 강체의 세점이 주어 졌을때 변환행렬 및 변화된 지점 구하기
+면적계산 함수 : get_poly_area(points)
+    -Input : 다각형의 (x,y)좌표 리스트
+    -Output : 면적 실수값
+화면 출력 및 마우스 이벤트 : openCV
+```
 
-get_rotation_theta(r1, r2) 
-    : 두 벡터가 주어졌을때 두 벡터의 회전각도
-get_rotation_matrix(vec1 : np.array, vec2 : np.array) 
-    : 두 벡터와  주어졌을 때 회전행렬
-get_rotation_pos(rotation_pos, ref_pos, com_pos, R1, R2=None) 
-    : 기준 강체의 변화 시키려는 지점과, 기준 강체의 기준점, 회전 강체의 기준점, 회전행렬이 주어졌을 때, 변화된 지점
+## Homography 판단
+check_homography.py
+```
+판단 함수 : check_homography(ref_points, compared_points)
+    -Input : 기준 사각형의 (x,y)좌표 리스트, 비교 사각형의 (x,y)좌표 리스트
+    -Output : Homography 문자열 (normal, reflex, concave, reflex)
+화면 출력 및 마우스 이벤트 : openCV
 ```
